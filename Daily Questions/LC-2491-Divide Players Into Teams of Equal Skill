@@ -1,0 +1,19 @@
+class Solution {
+    public long dividePlayers(int[] skill) {
+        
+        Arrays.sort(skill);
+        int temp=skill[0]+skill[skill.length-1];
+        long result=skill[0]*skill[skill.length-1];
+        for(int i=1;i<(skill.length)/2;i++){
+            int sum=0;
+            sum=skill[i]+skill[skill.length-i-1];
+            if(temp==sum){
+                result+=skill[i]*skill[skill.length-i-1];
+            }
+            else{
+                return -1;
+            }
+        }
+        return result;
+    }
+}
