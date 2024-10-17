@@ -1,0 +1,37 @@
+class Solution {
+    public int maximumSwap(int num) {
+        char[] numArray = Integer.toString(num).toCharArray();
+        int n = numArray.length;
+
+        // Create a max-heap (priority queue) to store pairs of (digit, index)
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> b[0] - a[0]);
+
+        // Fill the max-heap with digits and their indices
+        for (int i = 0; i < n; i++) {
+            pq.offer(new int[]{numArray[i] - '0', i});
+        }
+        // Map to store the last occurrence of each digit
+        int[] lastIndex = new int[10];
+        for (int i = 0; i < n; i++) {
+            lastIndex[numArray[i] - '0'] = i;
+        }
+        for (int j = 0; j < n; j++) {
+            // Check for digits greater than numArray[j]
+            for (int d = 9; d > numArray[j] - '0'; d--) {
+                // If there exists a larger digit later in the number
+                if (lastIndex[d] > j) {
+                    // Swap the current digit with the largest digit
+                    int swapIndex = lastIndex[d];
+                    char temp = numArray[j];
+                    numArray[j] = numArray[swapIndex];
+                    numArray[swapIndex] = temp;
+
+                    // Return the result as soon as one swap is done
+                    return Integer.parseInt(new String(numArray));
+                }
+            }
+        }
+        // If no swap is performed, return the original number
+        return num;
+    }
+}
