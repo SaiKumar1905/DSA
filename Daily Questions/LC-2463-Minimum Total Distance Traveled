@@ -1,0 +1,49 @@
+class Solution {
+    public long minimumTotalDistance(List<Integer> robot, int[][] factory) {
+        // Sort robots by their positions
+        Collections.sort(robot);
+        
+        // Sort factories by their positions
+        Arrays.sort(factory, Comparator.comparingInt(a -> a[0]));
+        
+        int n = robot.size();
+        int m = factory.length;
+        
+        // dp[i][j] represents the minimum distance to assign first i robots to first j factories
+        long[][] dp = new long[n + 1][m + 1];
+        
+        // Initialize DP array with large values as we are looking for the minimum
+        for (int i = 0; i <= n; i++) {
+            Arrays.fill(dp[i], Long.MAX_VALUE);
+        }
+        
+        // Base case: 0 robots and 0 factories require no distance
+        dp[0][0] = 0;
+        
+        // Fill DP array
+        for (int j = 1; j <= m; j++) { // For each factory
+            dp[0][j] = 0; // No robots assigned to any factory has zero distance
+            int factoryPos = factory[j - 1][0];
+            int limit = factory[j - 1][1];
+            
+            for (int i = 1; i <= n; i++) { // For each robot
+                // Initialize dp[i][j] with the value from the previous factory
+                dp[i][j] = dp[i][j - 1];
+                
+                long totalDistance = 0;
+                // Consider assigning up to 'limit' robots to the current factory
+                for (int k = 1; k <= Math.min(i, limit); k++) {
+                    // Add the distance for k-th robot to the factory
+                    totalDistance += Math.abs(robot.get(i - k) - factoryPos);
+                    // Update dp value if we find a smaller distance
+                    if (dp[i - k][j - 1] != Long.MAX_VALUE) {
+                        dp[i][j] = Math.min(dp[i][j], dp[i - k][j - 1] + totalDistance);
+                    }
+                }
+            }
+        }
+        
+        // The answer is the minimum distance to assign all robots to all factories
+        return dp[n][m];
+    }
+}
