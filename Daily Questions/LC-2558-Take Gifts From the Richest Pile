@@ -1,0 +1,18 @@
+class Solution {
+    public long pickGifts(int[] gifts, int k) {
+        PriorityQueue<Long> q=new PriorityQueue<>((a, b) -> Long.compare(b, a));
+        for(int i=0;i<gifts.length;i++){
+            q.add(Long.valueOf(gifts[i]));
+
+        }
+        for(int i=0;i<k;i++){
+            long s=(long)Math.sqrt(q.poll());
+            q.add(s);
+        }
+        long sum=0;
+        for(int i=0;!q.isEmpty();i++){
+            sum+=q.poll();
+        }
+        return sum;
+    }
+}
