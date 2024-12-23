@@ -1,0 +1,53 @@
+class Solution {
+    public int minimumOperations(TreeNode root) {
+
+        if(root==null) return 0;
+        Queue<TreeNode>q=new LinkedList<>();
+        q.offer(root);
+       int res=0;
+
+       while(!q.isEmpty()){
+        int size=q.size();
+        int[] arr=new int[size];
+        for(int i=0;i<size;i++){
+            TreeNode temp=q.poll();
+            arr[i]=temp.val;
+
+            if(temp.left!=null) q.add(temp.left);
+            if(temp.right!=null) q.add(temp.right);
+        }
+        res+=selectionSort(arr);
+
+       }
+        return res;
+    }
+   
+
+     private int selectionSort(int arr[])
+    {
+        int swaps = 0;
+
+        for(int i = 0; i < arr.length; i++)
+        {
+            int minIndex = i;
+            for(int j = i; j < arr.length; j++)
+            {
+                if(arr[j] < arr[minIndex])
+                {
+                    minIndex = j;
+                }
+            }
+
+            if(minIndex != i)
+            {
+                int temp = arr[i];
+                arr[i] = arr[minIndex];
+                arr[minIndex] = temp;
+
+                swaps++;
+            }
+        }
+
+        return swaps;
+    }
+}
