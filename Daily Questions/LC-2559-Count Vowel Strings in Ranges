@@ -1,0 +1,33 @@
+class Solution {
+    public int[] vowelStrings(String[] words, int[][] queries) {
+        int n=words.length;
+        int m=queries.length;
+        int[] prefix=new int[n];
+       int [] res=new int[m];
+        Set<Character>vowels=new HashSet<>(Arrays.asList('a','e','i','o','u'));
+
+        for(int i=0;i<n;i++){
+            if (vowels.contains(words[i].charAt(0)) && vowels.contains(words[i].charAt(words[i].length() - 1))){
+                prefix[i]++;
+
+            }
+        }
+        for(int i=1;i<n;i++){
+            prefix[i]+=prefix[i-1];
+        }
+
+        int index=0;
+
+        for(int [] q:queries){
+            int l=q[0];
+            int r=q[1];
+            if(l==0){
+                res[index++]=prefix[r];
+            }
+            else{
+                res[index++]=prefix[r]-prefix[l-1];
+            }
+        }
+    return res;
+    }
+}
